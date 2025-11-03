@@ -1,8 +1,8 @@
-'use client'
+ 'use client'
 
 import { createAppKit } from '@reown/appkit/react'
 import { WagmiProvider } from 'wagmi'
-import { base } from '@reown/appkit/networks'
+import { celo } from '@reown/appkit/networks'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { WagmiAdapter } from '@reown/appkit-adapter-wagmi'
 import React from 'react'
@@ -19,7 +19,7 @@ const metadata = {
 }
 
 // 3. Set the networks
-const networks = [base]
+const networks = [celo]
 
 // 4. Create Wagmi Adapter
 const wagmiAdapter = new WagmiAdapter({
@@ -31,7 +31,7 @@ const wagmiAdapter = new WagmiAdapter({
 // 5. Create modal
 createAppKit({
   adapters: [wagmiAdapter],
-  networks: [base],
+  networks: [celo],
   projectId,
   metadata,
   features: {
