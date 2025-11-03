@@ -3,7 +3,7 @@ import './globals.css'
 import { AppKitProvider } from '../lib/wagmi'
 
 export const metadata: Metadata = {
-  title: 'GeoQuest - Blockchain Geography Quiz',
+  title: 'Quest - Blockchain Geography Quiz',
   description: 'A geography quiz application on the blockchain',
 }
 
@@ -17,7 +17,7 @@ export default function RootLayout({
       <body className="font-sans">
         <AppKitProvider>
           {children}
-        </AppKitProvider>
+        </AppKitProvider>1
       </body>
     </html>
   )

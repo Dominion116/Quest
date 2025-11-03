@@ -8,7 +8,7 @@ export default function ConnectWallet() {
       <div className="text-center">
         <div className="bg-white/10 backdrop-blur-md rounded-3xl p-12 border border-white/20 max-w-md">
           <Compass className="w-20 h-20 text-white mx-auto mb-6" />
-          <h1 className="text-4xl font-bold text-white mb-4">GeoQuest</h1>
+          <h1 className="text-4xl font-bold text-white mb-4">Quest</h1>
           <p className="text-white/70 mb-8">Connect your wallet to start the geography quiz on the blockchain</p>
           <appkit-button />
         </div>
