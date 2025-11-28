@@ -3,8 +3,7 @@ import React from 'react';
 import { useState, useEffect } from 'react'
 import { useAccount } from 'wagmi'
 import { Compass, History, Shield, Loader2, CheckCircle, XCircle, Award, TrendingUp, Globe, MapPin, Send } from 'lucide-react'
-import { useGeoQuestContract, useContractData } from '../hooks/useContract'
-import { useSubmission } from '../hooks/useContract'
+import { useGeoQuestContract, useContractData, useSubmission, useCompletedCount } from '../hooks/useContract'
 
 interface Question {
   question: string
@@ -221,9 +220,9 @@ export default function Home() {
   const [toast, setToast] = useState<ToastState | null>(null)
   const [questions, setQuestions] = useState<Question[]>([])
   const [isLoadingQuestions, setIsLoadingQuestions] = useState(false)
-  const [completedCount, setCompletedCount] = useState(0)
   const { cid, owner } = useContractData()
   const { submitAnswer, updateCID, isPending, isConfirming, isConfirmed } = useGeoQuestContract()
+  const completedCount = useCompletedCount(address, questions.length)
 
   const isOwner = address && owner && address.toLowerCase() === owner.toLowerCase()
 

@@ -1,6 +1,9 @@
+import React from 'react'
 import { useReadContract, useWriteContract, useWaitForTransactionReceipt, useAccount } from 'wagmi'
+import { readContract } from 'wagmi/actions'
 import { celo } from 'wagmi/chains'
 import { CONTRACT_ADDRESS, CONTRACT_ABI } from '../lib/contract'
+import { wagmiConfig } from '../lib/wagmi'
 
 export function useGeoQuestContract() {
   const { address } = useAccount()
@@ -76,4 +79,38 @@ export function useSubmission(userAddress: string | undefined, questionId: numbe
     timestamp: submission?.[1],
     exists: submission?.[2],
   }
+}
+
+export function useCompletedCount(userAddress: string | undefined, totalQuestions: number) {
+  const [completedCount, setCompletedCount] = React.useState(0)
+
+  React.useEffect(() => {
+    if (!userAddress || totalQuestions === 0) {
+      setCompletedCount(0)
+      return
+    }
+
+    const checkCompletions = async () => {
+      let count = 0
+      for (let i = 1; i <= totalQuestions; i++) {
+        try {
+          const result = await readContract(wagmiConfig, {
+            address: CONTRACT_ADDRESS,
+            abi: CONTRACT_ABI,
+            functionName: 'getSubmission',
+            args: [userAddress as `0x${string}`, BigInt(i)],
+            chainId: celo.id,
+          })
+          if (result?.[2]) count++
+        } catch (error) {
+          console.error(`Error checking question ${i}:`, error)
+        }
+      }
+      setCompletedCount(count)
+    }
+
+    checkCompletions()
+  }, [userAddress, totalQuestions])
+
+  return completedCount
 }

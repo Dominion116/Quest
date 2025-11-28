@@ -28,6 +28,8 @@ const wagmiAdapter = new WagmiAdapter({
   ssr: true
 })
 
+export const wagmiConfig = wagmiAdapter.wagmiConfig
+
 // 5. Create modal
 createAppKit({
   adapters: [wagmiAdapter],
