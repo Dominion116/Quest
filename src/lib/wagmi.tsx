@@ -14,7 +14,7 @@ const projectId = process.env.NEXT_PUBLIC_PROJECT_ID || 'YOUR_PROJECT_ID'
 const metadata = {
   name: 'GeoQuest',
   description: 'A geography quiz application on the blockchain',
-  url: 'https://geoquest.app',
+  url: typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3001',
   icons: ['https://avatars.githubusercontent.com/u/179229932']
 }
 
