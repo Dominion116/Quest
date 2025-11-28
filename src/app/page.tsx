@@ -2,7 +2,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react'
 import { useAccount } from 'wagmi'
-import { Compass, History, Shield, Loader2, CheckCircle, XCircle, Award, TrendingUp, Globe, MapPin, Send } from 'lucide-react'
+import { Compass, History, Shield, Loader2, CheckCircle, XCircle, Award, TrendingUp, Globe, MapPin, Send, Edit2, RotateCcw } from 'lucide-react'
 import { useGeoQuestContract, useContractData, useSubmission, useCompletedCount } from '../hooks/useContract'
 
 interface Question {
@@ -61,13 +61,20 @@ const QuestionCard = ({ question, questionId, onSubmit, userAddress, isSubmittin
   isSubmitting: boolean
 }) => {
   const [answer, setAnswer] = useState('')
+  const [isEditing, setIsEditing] = useState(false)
   const { answer: previousAnswer, timestamp, exists } = useSubmission(userAddress, questionId)
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!answer.trim()) return
-    onSubmit(questionId, answer)
+    await onSubmit(questionId, answer)
     setAnswer('')
+    setIsEditing(false)
+  }
+
+  const handleEdit = () => {
+    setAnswer(previousAnswer || '')
+    setIsEditing(true)
   }
 
   return (
@@ -95,11 +102,20 @@ const QuestionCard = ({ question, questionId, onSubmit, userAddress, isSubmittin
               )}
             </div>
             
-            {exists ? (
+            {exists && !isEditing ? (
               <div className="bg-gradient-to-br from-emerald-500/10 to-green-500/10 border border-emerald-500/30 rounded-xl sm:rounded-2xl p-4 sm:p-6 backdrop-blur-sm">
-                <div className="flex items-center gap-2 sm:gap-3 mb-3">
-                  <Award className="w-5 h-5 sm:w-6 sm:h-6 text-emerald-400 flex-shrink-0" />
-                  <span className="text-emerald-400 font-semibold text-base sm:text-lg">Your Answer</span>
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-2 sm:gap-3">
+                    <Award className="w-5 h-5 sm:w-6 sm:h-6 text-emerald-400 flex-shrink-0" />
+                    <span className="text-emerald-400 font-semibold text-base sm:text-lg">Your Answer</span>
+                  </div>
+                  <button
+                    onClick={handleEdit}
+                    className="flex items-center gap-1.5 px-2.5 py-1.5 sm:px-3 sm:py-2 bg-white/5 hover:bg-white/10 border border-white/20 hover:border-white/40 rounded-lg text-white/80 hover:text-white text-xs sm:text-sm transition-all"
+                  >
+                    <Edit2 className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                    <span>Edit</span>
+                  </button>
                 </div>
                 <p className="text-white text-base sm:text-lg font-medium mb-3 break-words">{previousAnswer}</p>
                 <div className="flex items-center gap-2 text-white/50 text-xs sm:text-sm">
@@ -109,6 +125,12 @@ const QuestionCard = ({ question, questionId, onSubmit, userAddress, isSubmittin
               </div>
             ) : (
               <div className="space-y-3 sm:space-y-4">
+                {isEditing && (
+                  <div className="flex items-center gap-2 text-yellow-400 text-xs sm:text-sm bg-yellow-500/10 border border-yellow-500/30 rounded-lg sm:rounded-xl p-2 sm:p-3">
+                    <RotateCcw className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0" />
+                    <span>Editing your answer - this will update your previous submission</span>
+                  </div>
+                )}
                 <div className="relative">
                   <input
                     type="text"
@@ -119,23 +141,36 @@ const QuestionCard = ({ question, questionId, onSubmit, userAddress, isSubmittin
                   />
                   <MapPin className="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-white/20" />
                 </div>
-                <button
-                  onClick={handleSubmit}
-                  disabled={isSubmitting || !answer.trim()}
-                  className="w-full bg-gradient-to-r from-purple-500 via-purple-600 to-pink-500 text-white px-6 py-3 sm:px-8 sm:py-4 rounded-xl sm:rounded-2xl font-semibold text-base sm:text-lg hover:from-purple-600 hover:via-purple-700 hover:to-pink-600 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 sm:gap-3 transition-all shadow-lg hover:shadow-purple-500/50 hover:scale-[1.02] active:scale-[0.98]"
-                >
-                  {isSubmitting ? (
-                    <>
-                      <Loader2 className="w-5 h-5 sm:w-6 sm:h-6 animate-spin" />
-                      <span>Submitting...</span>
-                    </>
-                  ) : (
-                    <>
-                      <Send className="w-5 h-5 sm:w-6 sm:h-6" />
-                      <span>Submit Answer</span>
-                    </>
+                <div className="flex gap-2 sm:gap-3">
+                  {isEditing && (
+                    <button
+                      onClick={() => {
+                        setAnswer('')
+                        setIsEditing(false)
+                      }}
+                      className="px-4 py-3 sm:px-6 sm:py-4 bg-white/5 hover:bg-white/10 border-2 border-white/10 hover:border-white/20 rounded-xl sm:rounded-2xl text-white font-semibold text-base sm:text-lg transition-all"
+                    >
+                      Cancel
+                    </button>
                   )}
-                </button>
+                  <button
+                    onClick={handleSubmit}
+                    disabled={isSubmitting || !answer.trim()}
+                    className="flex-1 bg-gradient-to-r from-purple-500 via-purple-600 to-pink-500 text-white px-6 py-3 sm:px-8 sm:py-4 rounded-xl sm:rounded-2xl font-semibold text-base sm:text-lg hover:from-purple-600 hover:via-purple-700 hover:to-pink-600 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 sm:gap-3 transition-all shadow-lg hover:shadow-purple-500/50 hover:scale-[1.02] active:scale-[0.98]"
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <Loader2 className="w-5 h-5 sm:w-6 sm:h-6 animate-spin" />
+                        <span>{isEditing ? 'Updating...' : 'Submitting...'}</span>
+                      </>
+                    ) : (
+                      <>
+                        {isEditing ? <RotateCcw className="w-5 h-5 sm:w-6 sm:h-6" /> : <Send className="w-5 h-5 sm:w-6 sm:h-6" />}
+                        <span>{isEditing ? 'Update Answer' : 'Submit Answer'}</span>
+                      </>
+                    )}
+                  </button>
+                </div>
               </div>
             )}
           </div>
