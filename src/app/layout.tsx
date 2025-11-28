@@ -17,7 +17,7 @@ export default function RootLayout({
       <body className="font-sans">
         <AppKitProvider>
           {children}
-        </AppKitProvider>1
+        </AppKitProvider>
       </body>
     </html>
   )
