@@ -46,8 +46,17 @@ export default function LandingPage({ onGetStarted }: LandingPageProps) {
       </header>
 
       {/* Hero Section */}
-      <section className="relative z-10 pt-20 pb-32 px-4 sm:px-6">
-        <div className="max-w-4xl mx-auto text-center">
+      <section className="relative z-10 pt-20 pb-32 px-4 sm:px-6 overflow-hidden">
+        {/* Floating Balls */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-20 left-[10%] w-20 h-20 bg-primary/30 rounded-full blur-xl animate-float" style={{ animationDuration: '6s' }} />
+          <div className="absolute top-40 right-[15%] w-32 h-32 bg-accent/20 rounded-full blur-2xl animate-float" style={{ animationDuration: '8s', animationDelay: '1s' }} />
+          <div className="absolute bottom-32 left-[20%] w-24 h-24 bg-primary/20 rounded-full blur-xl animate-float" style={{ animationDuration: '7s', animationDelay: '2s' }} />
+          <div className="absolute top-60 right-[25%] w-16 h-16 bg-accent/30 rounded-full blur-lg animate-float" style={{ animationDuration: '9s', animationDelay: '0.5s' }} />
+          <div className="absolute bottom-20 right-[10%] w-28 h-28 bg-primary/25 rounded-full blur-2xl animate-float" style={{ animationDuration: '7.5s', animationDelay: '1.5s' }} />
+        </div>
+
+        <div className="max-w-4xl mx-auto text-center relative z-10">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-surface border border-primary/30 rounded-full mb-8">
             <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
             <span className="text-sm text-gray-300">Powered by Celo Blockchain</span>
