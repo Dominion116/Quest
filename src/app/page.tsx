@@ -44,7 +44,7 @@ const Toast = ({ message, type, onClose }: { message: string; type: 'success' | 
 
 // Stats Card Component
 const StatsCard = ({ icon: Icon, label, value }: { icon: any; label: string; value: number | string }) => (
-  <div className="bg-surface border border-[#333] rounded-xl sm:rounded-2xl p-4 sm:p-6 hover:border-primary/50 transition-all">
+  <div className="bg-surface border border-[#333] rounded-xl sm:rounded-2xl p-4 sm:p-6 hover:border-primary/50 hover:scale-105 transition-all">
     <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-primary/10 flex items-center justify-center mb-3 sm:mb-4">
       <Icon className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
     </div>
@@ -358,7 +358,7 @@ export default function Home() {
       
       <div className="max-w-6xl mx-auto px-4 py-6 sm:px-6">
         {/* Header */}
-        <header className="mb-8 sm:mb-12">
+        <header className="mb-8 sm:mb-12 animate-fade-in">
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-3 min-w-0">
               <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-primary flex items-center justify-center flex-shrink-0">
@@ -376,7 +376,7 @@ export default function Home() {
         </header>
 
         {/* Stats Dashboard */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-8 sm:mb-12">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-8 sm:mb-12 animate-slide-up">
           <StatsCard icon={Target} label="Total Questions" value={totalQuestions} />
           <StatsCard icon={CheckCircle} label="Completed" value={completedCount} />
           <StatsCard icon={BarChart3} label="Remaining" value={totalQuestions - completedCount} />
@@ -385,7 +385,7 @@ export default function Home() {
 
         {/* IPFS CID Info */}
         {cid && (
-          <div className="bg-surface border border-[#333] rounded-2xl p-4 sm:p-5 mb-6 sm:mb-8">
+          <div className="bg-surface border border-[#333] rounded-2xl p-4 sm:p-5 mb-6 sm:mb-8 animate-slide-up animate-delay-100">
             <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
               <div className="flex-1 min-w-0">
                 <div className="text-gray-400 text-xs sm:text-sm mb-1">Current IPFS CID</div>
@@ -405,13 +405,13 @@ export default function Home() {
 
         {/* Owner Panel */}
         {isOwner && (
-          <div className="mb-8">
+          <div className="mb-8 animate-scale-in">
             <OwnerPanel onUpdateCID={handleUpdateCID} isUpdating={isPending || isConfirming} />
           </div>
         )}
 
         {/* Questions Section */}
-        <div className="space-y-4 sm:space-y-6">
+        <div className="space-y-4 sm:space-y-6 animate-fade-in">
           <div className="flex items-center justify-between gap-3 mb-4 sm:mb-6">
             <h2 className="text-xl sm:text-2xl font-semibold text-white">Quiz Questions</h2>
             {questions.length > 0 && (
@@ -439,11 +439,11 @@ export default function Home() {
               />
               
               {/* Navigation Buttons */}
-              <div className="flex items-center justify-between gap-2 sm:gap-4 pt-4">
+              <div className="flex items-center justify-between gap-2 sm:gap-4 pt-4 animate-slide-up">
                 <button
                   onClick={() => setCurrentQuestionIndex(prev => Math.max(0, prev - 1))}
                   disabled={currentQuestionIndex === 0}
-                  className="px-4 py-2 sm:px-6 sm:py-3 bg-surface hover:bg-[#2a2a2a] border border-[#333] hover:border-primary/50 rounded-xl text-white font-medium text-sm disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                  className="px-4 py-2 sm:px-6 sm:py-3 bg-surface hover:bg-[#2a2a2a] border border-[#333] hover:border-primary/50 rounded-xl text-white font-medium text-sm disabled:opacity-30 disabled:cursor-not-allowed hover:scale-105 transition-all"
                 >
                   Previous
                 </button>
@@ -465,7 +465,7 @@ export default function Home() {
                 <button
                   onClick={() => setCurrentQuestionIndex(prev => Math.min(questions.length - 1, prev + 1))}
                   disabled={currentQuestionIndex === questions.length - 1}
-                  className="px-4 py-2 sm:px-6 sm:py-3 bg-primary hover:bg-primary-hover text-white rounded-xl font-medium text-sm disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                  className="px-4 py-2 sm:px-6 sm:py-3 bg-primary hover:bg-primary-hover text-white rounded-xl font-medium text-sm disabled:opacity-30 disabled:cursor-not-allowed hover:scale-105 transition-all"
                 >
                   Next
                 </button>
