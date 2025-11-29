@@ -2,6 +2,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react'
 import { useAccount } from 'wagmi'
+import { useAppKit } from '@reown/appkit/react'
 import { Globe, CheckCircle, Loader2, Award, BarChart3, Target, Edit2, RotateCcw } from 'lucide-react'
 import { useGeoQuestContract, useContractData, useSubmission, useCompletedCount } from '../hooks/useContract'
 import LandingPage from '../components/LandingPage'
@@ -241,6 +242,7 @@ const ConnectWallet = () => (
 // Main Component
 export default function Home() {
   const { address, isConnected } = useAccount()
+  const { open } = useAppKit()
   const [toast, setToast] = useState<ToastState | null>(null)
   const [questions, setQuestions] = useState<Question[]>([])
   const [isLoadingQuestions, setIsLoadingQuestions] = useState(false)
@@ -328,24 +330,8 @@ export default function Home() {
   // Show landing page if not connected or dashboard not shown yet
   if (!showDashboard || !isConnected) {
     return <LandingPage onGetStarted={() => {
-      // Set flag to show dashboard once connected
-      if (!isConnected) {
-        // Trigger wallet connect modal by dispatching a click event
-        setTimeout(() => {
-          const connectButton = document.querySelector('appkit-button')
-          if (connectButton) {
-            const shadowRoot = connectButton.shadowRoot
-            if (shadowRoot) {
-              const button = shadowRoot.querySelector('button')
-              if (button) {
-                button.click()
-              }
-            } else {
-              (connectButton as HTMLElement).click()
-            }
-          }
-        }, 100)
-      }
+      // Open the AppKit modal
+      open()
     }} />
   }
 
