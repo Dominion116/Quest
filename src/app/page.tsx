@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useAccount } from 'wagmi'
 import { Globe, CheckCircle, Loader2, Award, BarChart3, Target, Edit2, RotateCcw } from 'lucide-react'
 import { useGeoQuestContract, useContractData, useSubmission, useCompletedCount } from '../hooks/useContract'
+import LandingPage from '../components/LandingPage'
 
 interface Question {
   question: string
@@ -244,11 +245,21 @@ export default function Home() {
   const [questions, setQuestions] = useState<Question[]>([])
   const [isLoadingQuestions, setIsLoadingQuestions] = useState(false)
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
+  const [showDashboard, setShowDashboard] = useState(false)
   const { cid, owner } = useContractData()
   const { submitAnswer, updateCID, isPending, isConfirming, isConfirmed } = useGeoQuestContract()
   const completedCount = useCompletedCount(address, questions.length)
 
   const isOwner = address && owner && address.toLowerCase() === owner.toLowerCase()
+
+  // Handle showing dashboard after wallet connection
+  useEffect(() => {
+    if (isConnected) {
+      setShowDashboard(true)
+    } else {
+      setShowDashboard(false)
+    }
+  }, [isConnected])
 
   // Fetch questions from IPFS
   useEffect(() => {
@@ -314,8 +325,28 @@ export default function Home() {
     }
   }, [isConfirmed])
 
-  if (!isConnected) {
-    return <ConnectWallet />
+  // Show landing page if not connected or dashboard not shown yet
+  if (!showDashboard || !isConnected) {
+    return <LandingPage onGetStarted={() => {
+      // Set flag to show dashboard once connected
+      if (!isConnected) {
+        // Trigger wallet connect modal by dispatching a click event
+        setTimeout(() => {
+          const connectButton = document.querySelector('appkit-button')
+          if (connectButton) {
+            const shadowRoot = connectButton.shadowRoot
+            if (shadowRoot) {
+              const button = shadowRoot.querySelector('button')
+              if (button) {
+                button.click()
+              }
+            } else {
+              (connectButton as HTMLElement).click()
+            }
+          }
+        }, 100)
+      }
+    }} />
   }
 
   const totalQuestions = questions.length
