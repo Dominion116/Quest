@@ -99,8 +99,7 @@ export function useCompletedCount(userAddress: string | undefined, totalQuestion
             abi: CONTRACT_ABI,
             functionName: 'getSubmission',
             args: [userAddress as `0x${string}`, BigInt(i)],
-            chainId: celo.id,
-          })
+          } as any)
           if (result?.[2]) count++
         } catch (error) {
           console.error(`Error checking question ${i}:`, error)
