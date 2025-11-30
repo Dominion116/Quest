@@ -7,6 +7,19 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { WagmiAdapter } from '@reown/appkit-adapter-wagmi'
 import React from 'react'
 
+// Fix for ethereum provider conflict with browser extensions
+if (typeof window !== 'undefined') {
+  try {
+    // Prevent extensions from redefining ethereum object
+    if (window.ethereum) {
+      Object.freeze(window.ethereum)
+    }
+  } catch (error) {
+    // Silently catch any errors from the freeze attempt
+    console.warn('Could not freeze ethereum object:', error)
+  }
+}
+
 // 1. Get projectId from https://cloud.reown.com
 const projectId = process.env.NEXT_PUBLIC_PROJECT_ID || 'YOUR_PROJECT_ID'
 
